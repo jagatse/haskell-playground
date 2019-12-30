@@ -2,6 +2,5 @@
 hello = "Hello"
 world = "World"
 
-talk = printStrLn $ unlines [hello, world]
-
+talk = putStrLn $ unlines [hello, world]
 
