@@ -1,4 +1,6 @@
 
+-- Solutions to problems in: https://wiki.haskell.org/H-99:_Ninety-Nine_Haskell_Problems 
+-- Used as exercises when reading: http://learnyouahaskell.com/
 
 -- Problem 01
 -- myLast -- Get the last element of a list.
@@ -54,5 +56,6 @@ pack (x:xs) = (takeWhile (x==) (x:xs)) : pack (dropWhile (x==) xs)
 
 -- Problem 10
 -- encode -- Run-length encoding of a list.
-encode ::  Eq b => [b] -> [(Int, b)]
+-- Had to add an explicit type signature here to avoid: https://wiki.haskell.org/Monomorphism_restriction
+encode ::  Eq b => [b] -> [(Int, b)] 
 encode = (map (\l -> (length l, head l))) . pack
