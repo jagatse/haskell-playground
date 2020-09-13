@@ -22,10 +22,14 @@ elementAt (x:xs) n
 
 -- Problem 04
 -- myLength -- Find the number of elements of a list.
+myLength :: (Num b) => [a] -> b -- Inferred type is: [a] -> Integer
 myLength = len 0
     where 
         len n [] = n
         len n (x:xs) = len (n+1) xs
+
+myLength_foldr :: (Foldable t, Num b) => t a -> b
+myLength_foldr = foldr (\_ -> (+1)) 0
 
 -- Problem 05
 -- myReverse -- Reverse a list.
