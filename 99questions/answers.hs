@@ -63,3 +63,29 @@ pack (x:xs) = (takeWhile (x==) (x:xs)) : pack (dropWhile (x==) xs)
 -- Had to add an explicit type signature here to avoid: https://wiki.haskell.org/Monomorphism_restriction
 encode ::  Eq b => [b] -> [(Int, b)] 
 encode = (map (\l -> (length l, head l))) . pack
+
+
+-- Problem 11
+-- encodeModified -- Modified run-length encoding.
+data Rle a = Single a | Multiple Int a deriving Show
+
+encodeModified ::  Eq b => [b] -> [Rle b] 
+encodeModified = (map (\l -> if length l == 1 then Single (head l) else Multiple (length l) (head l))) . pack
+encodeModified' ls = map toRle $ encode ls
+    where
+        toRle (1, v) = Single v
+        toRle (n, v) = Multiple n v
+
+
+-- Problem 12
+-- decodeModified -- Decode a run-length encoded list.
+decodeModified [] = []
+decodeModified ((Single x) : tokens) = x : decodeModified tokens
+decodeModified ((Multiple 1 x) : tokens) = x : decodeModified tokens
+decodeModified ((Multiple n x) : tokens) = x : decodeModified ((Multiple (n - 1) x) : tokens)
+
+decodeModified' = foldr (++) [] . map tolist
+    where
+        tolist (Single x) = [x]
+        tolist (Multiple n x) = take n $ repeat x
+
