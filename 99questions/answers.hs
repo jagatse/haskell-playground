@@ -89,3 +89,53 @@ decodeModified' = foldr (++) [] . map tolist
         tolist (Single x) = [x]
         tolist (Multiple n x) = take n $ repeat x
 
+
+-- Problem 13
+-- encodeDirect -- Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates, as in problem 9, but only count them.
+encodeDirect [] = []
+encodeDirect (x:xs) = enc x 1 xs
+    where
+        enc y n (z:zs)
+            | y == z = enc y (n+1) zs
+        enc y 1 zs = (Single y) : encodeDirect zs 
+        enc y n zs = (Multiple n y) : encodeDirect zs
+
+
+-- Problem 14
+-- dupli -- Duplicate the elements of a list.
+dupli [] = []
+dupli (x:xs) = x : x : dupli xs
+
+
+-- Problem 15
+-- repli -- Replicate the elements of a list a given number of times.
+repli ls n = foldr (++) [] $ map (take n . repeat) ls 
+
+
+-- Problem 16
+-- dropEvery -- Drop every N'th element from a list.
+dropEvery ls n = map fst $ filter ((/= 0) . snd) $ zip ls $ map ( `mod` n) [1..]
+
+
+-- Problem 17
+-- split -- Split a list into two parts; the length of the first part is given. Do not use any predefined predicates.
+split ls n = (takeN n ls, dropN n ls)
+    where
+        takeN c ls 
+            | c < 1 || ls == [] = []
+        takeN c (l:ls) = l : takeN (c-1) ls
+        dropN c ls
+            | c < 1 || ls == [] = ls
+        dropN c (l:ls) = dropN (c-1) ls
+
+
+-- Problem 18
+-- slice -- Given two indices, i and k, the slice is the list containing the elements between the i'th and k'th element of the original list (both limits included). Start counting the elements with 1.
+slice ls i k = take (k - i + 1) $ drop (i - 1) ls
+
+
+-- Problem 19
+-- rotate -- Rotate a list N places to the left. Hint: Use the predefined functions length and (++).
+rotate ls n = (drop steps ls) ++ (take steps ls)
+    where 
+        steps = n `mod` (length ls) -- In Haskell, -1 `mod 5 == 4 
